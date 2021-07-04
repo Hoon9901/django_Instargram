@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
-class Photo(models.Model) :
+class Photo(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     text = models.TextField(blank=True)
     image = models.ImageField(upload_to='timeline_photo/%Y/%m/%d')
@@ -14,3 +15,6 @@ class Photo(models.Model) :
 
     class Meta:
         ordering = ['-created'] # 최신순
+
+    def get_absolute_url(self):
+        return reverse('photo:detail', args = [self.id])
