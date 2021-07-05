@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.urls import reverse
+from django.urls import reverse # Use get_absolute_url 
 
 # Create your models here.
 class Photo(models.Model):
