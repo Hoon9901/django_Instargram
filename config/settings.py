@@ -38,8 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     'photo',
-    'accounts'
+    'accounts',
+    'disqus',
 ]
 
 MIDDLEWARE = [
@@ -132,3 +134,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 로그인 성공 시 접속할 링크
 LOGIN_REDIRECT_URL = '/'
+
+DISQUS_WEBSITE_SHORTNAME = 'hoonstargram'
+SITE_ID = 1
