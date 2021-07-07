@@ -1,9 +1,12 @@
 from django.http.response import HttpResponseRedirect
+from django.http import HttpResponseForbidden
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from django.views.generic.base import View
+from urllib.parse import urlparse
 from .models import Photo
 
 # Create your views here.
@@ -11,8 +14,7 @@ from .models import Photo
 
 class PhotoList(ListView):
     model = Photo
-    template_name = '_list'
-    #template_name_suffix = '_list'  # 북마크 모델
+    template_name_suffix = '_list'  # 북마크 모델
 
 
 class PhotoCreate(CreateView):
@@ -63,3 +65,38 @@ class PhotoDelete(DeleteView):
 class PhotoDetail(DetailView):
     model = Photo
     template_name_suffix = '_detail'
+
+
+class PhotoLike(View):
+    # get 요청
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated :  #로그인 체크
+            return HttpResponseForbidden() 
+        else :
+            if 'photo_id' in kwargs : 
+                photo_id = kwargs['photo_id']
+                photo = Photo.objects.get(pk=photo_id)
+                user = request.user
+                if user in photo.like.all():    # 좋아요 취소
+                    photo.like.remove(user)
+                else :                          # 좋아요
+                    photo.like.add(user)
+            # 좋아요 누른 경로에 따라 머무르기
+            referer_url = request.META.get('HTTP_REFERER')
+            path = urlparse(referer_url).path
+            return HttpResponseRedirect(path)
+
+class Photofavorite(View):
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated :  #로그인 체크
+            return HttpResponseForbidden()
+        else :
+            if 'photo_id' in kwargs : 
+                photo_id = kwargs['photo_id']
+                photo = Photo.objects.get(pk=photo_id)
+                user = request.user
+                if user in photo.favorite.all():
+                    photo.favorite.remove(user)
+                else :
+                    photo.favorite.add(user)
+            return HttpResponseRedirect('/')

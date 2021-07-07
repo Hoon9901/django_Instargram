@@ -17,8 +17,20 @@
                     <p class = "card-text">{{ photo.text }}</p>
                 </div>
                 <ul class = "list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href = "{% url 'photo:like' photo.id %}" class="float-left btn-like {% if user in photo.like.all %} active {% endif%}">
+                            좋아요
+                        </a>
+                        {% if photo.like.all.count %}
+                        <span class="float-left"> <!-- 좋아요 수 -->
+                            {{ photo.like.all.count }}
+                        </span>
+                        {% endif %}
+                        <a href = "{% url 'photo:favorite' photo.id %}" class="float-left btn-favorite {% if user in photo.favorite.all %} active {% endif %}">
+                            저장하기
+                        </a>
+                    </li>
                     <li class = "list-group-item">생성일 : {{ photo.created }}</li>
-                    <li class = "list-group-item">수정일 : {{ photo.updated }}</li>
                 </ul>
                 <div class = "card-body">
                     <a href = "{% url 'photo:detail' photo.id %}" class = "card-link">댓글달기</a>
