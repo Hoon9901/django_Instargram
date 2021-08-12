@@ -3,46 +3,60 @@
 {% endblock %}
 
 {% block content %}
-<div class = 'container'>
-    <div class = "row">
-        <div class = "col"></div>
-        <div class = "col-5">
+<div class='container'>
+    <div class="row">
+        <div class="col"></div>
+        <div class="col-5">
             {% for photo in photo_list %}
-            <div class = "card mt-2 mb-2">
-                <div class ="card-header">
+            <div class="card mt-2 mb-2">
+                <div class="card-header">
                     {{ photo.author}}
                 </div>
-                <img src = " {{ photo.image.url }}" class = "card-img-top" alt = "...">
-                <div class = "card-body">
-                    <p class = "card-text">{{ photo.text }}</p>
+                <img src=" {{ photo.image.url }}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <p class="card-text">{{ photo.text }}</p>
                 </div>
-                <ul class = "list-group list-group-flush">
+                <ul class="list-group list-group-flush">
                     <li class="list-group-item">
-                        <a href = "{% url 'photo:like' photo.id %}" class="float-left btn-like {% if user in photo.like.all %} active {% endif%}">
+                        <a href="{% url 'photo:like' photo.id %}"
+                            class="float-left btn-like {% if user in photo.like.all %} active {% endif%}">
                             좋아요
                         </a>
                         {% if photo.like.all.count %}
-                        <span class="float-left"> <!-- 좋아요 수 -->
+                        <span class="float-left">
+                            <!-- 좋아요 수 -->
                             {{ photo.like.all.count }}
                         </span>
                         {% endif %}
-                        <a href = "{% url 'photo:favorite' photo.id %}" class="float-left btn-favorite {% if user in photo.favorite.all %} active {% endif %}">
+                        <a href="{% url 'photo:favorite' photo.id %}"
+                            class="float-left btn-favorite {% if user in photo.favorite.all %} active {% endif %}">
                             저장하기
                         </a>
                     </li>
-                    <li class = "list-group-item">생성일 : {{ photo.created }}</li>
+                    <li class="list-group-item">생성일 : {{ photo.created }}</li>
                 </ul>
-                <div class = "card-body">
-                    <a href = "{% url 'photo:detail' photo.id %}" class = "card-link">댓글달기</a>
+                <div class="card-body">
+                    <a href="{% url 'photo:detail' photo.id %}" class="card-link">댓글달기</a>
                     {% if user == photo.author %}
-                    <a href = "{% url 'photo:update' photo.id %}" class = "card-link">수정하기</a>
-                    <a href = "{% url 'photo:delete' photo.id %}" class = "card-link">삭제하기</a>
+                    <a href="{% url 'photo:update' photo.id %}" class="card-link">수정하기</a>
+                    <a href="{% url 'photo:delete' photo.id %}" class="card-link">삭제하기</a>
                     {% endif %}
                 </div>
             </div>
             {% endfor %}
         </div>
-        <div class="col"></div>
+        <div class="col">
+            {% load static %}
+            <div class="card" style="">
+                <!-- 프로필 사진 -->
+                <img src="{% static 'images/bu-k.jpg' %}" class="card-img-top">
+                <div class="card-body">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text">회원님의 스토리를 확인해보세요!</p>
+                    <a href="{% url 'photo:mylist' %}" class="btn btn-primary">회원님의 스토리 이동</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
